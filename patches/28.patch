@@ -1,0 +1,60 @@
+From eaaa657a435c8c9d3dcf3132c6701f2b87ec98bb Mon Sep 17 00:00:00 2001
+From: "C.W. Betts" <computers57@hotmail.com>
+Date: Tue, 8 Jun 2021 15:42:01 -0600
+Subject: [PATCH 1/2] Update c-cpp.yml
+
+And Clang as a compiler for CI.
+
+Different compilers emit different warnings.
+---
+ .github/workflows/c-cpp.yml | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/.github/workflows/c-cpp.yml b/.github/workflows/c-cpp.yml
+index 80c06f5..626e103 100644
+--- a/.github/workflows/c-cpp.yml
++++ b/.github/workflows/c-cpp.yml
+@@ -22,6 +22,18 @@ jobs:
+             libopenal-dev
+             libwxgtk3.0-gtk3-dev
+             libncap-dev
++        - name: Ubuntu 64bit (clang)
++          os: ubuntu-latest
++          args: --enable-networking --enable-release-build CFLAGS="-DPCEM_BUILD_VERSION=${GITHUB_SHA::8}"
++          artifacts_name: PCem-Ubuntu-Clang-${{ github.head_ref }}-${{ github.run_number }}
++          artifacts_path: PCem-Clang-${{ github.sha }}.tar.bz2
++          compiler: clang
++          installdeps: >-
++            libsdl2-dev
++            libopenal-dev
++            libwxgtk3.0-gtk3-dev
++            libncap-dev
++            clang
+         - name: Windows 32bits (MSYS2)
+           os: windows-latest
+           compiler: MINGW32
+
+From 787c92cd36da34a1318216619831023e47cf5a90 Mon Sep 17 00:00:00 2001
+From: "C.W. Betts" <computers57@hotmail.com>
+Date: Tue, 8 Jun 2021 15:56:02 -0600
+Subject: [PATCH 2/2] Update c-cpp.yml
+
+Add environment variables for clang and clang++
+---
+ .github/workflows/c-cpp.yml | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/.github/workflows/c-cpp.yml b/.github/workflows/c-cpp.yml
+index 626e103..8ae9a9d 100644
+--- a/.github/workflows/c-cpp.yml
++++ b/.github/workflows/c-cpp.yml
+@@ -28,6 +28,9 @@ jobs:
+           artifacts_name: PCem-Ubuntu-Clang-${{ github.head_ref }}-${{ github.run_number }}
+           artifacts_path: PCem-Clang-${{ github.sha }}.tar.bz2
+           compiler: clang
++          env:
++            CC: clang
++            CXX: clang++
+           installdeps: >-
+             libsdl2-dev
+             libopenal-dev
